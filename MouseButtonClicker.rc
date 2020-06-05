@@ -1,4 +1,4 @@
-#include "afxres.h"
+#include <winresrc.h>
 
 
 // English (U.S.) resources
