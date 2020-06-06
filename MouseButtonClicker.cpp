@@ -50,14 +50,14 @@ LRESULT CALLBACK WndProc(const HWND hWnd, const UINT message, const WPARAM wPara
 		{
 			// Query for required buffer size
 			UINT cbSize = 0;
-			if(0 == GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &cbSize, sizeof(RAWINPUTHEADER)))
+			if (0 == GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &cbSize, sizeof(RAWINPUTHEADER)))
 			{
 				// Allocate buffer on stack (falls back to heap)
 				const LPVOID pData = _malloca(cbSize);
-				if(NULL != pData)
+				if (NULL != pData)
 				{
 					// Get raw input data
-					if(cbSize == GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, pData, &cbSize, sizeof(RAWINPUTHEADER)))
+					if (cbSize == GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, pData, &cbSize, sizeof(RAWINPUTHEADER)))
 					{
 						// Only interested in mouse input
 						const RAWINPUT* const pRawInput = static_cast<LPRAWINPUT>(pData);
@@ -71,7 +71,7 @@ LRESULT CALLBACK WndProc(const HWND hWnd, const UINT message, const WPARAM wPara
 							const LONG lMouseInputLastY = pRawInput->data.mouse.lLastY;
 
 							// Update mouse delta variables
-							if(0 == (pRawInput->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE))
+							if (0 == (pRawInput->data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE))
 							{
 								// Handle relative coordinates
 								lLastClickDeltaX += lMouseInputLastX;
@@ -101,10 +101,10 @@ LRESULT CALLBACK WndProc(const HWND hWnd, const UINT message, const WPARAM wPara
 
 							// Determine the input type
 							const UINT usButtonFlags = pRawInput->data.mouse.usButtonFlags;
-							if(0 == (usButtonFlags & (RI_ALL_MOUSE_BUTTONS_DOWN | RI_ALL_MOUSE_BUTTONS_UP | RI_MOUSE_WHEEL)))
+							if (0 == (usButtonFlags & (RI_ALL_MOUSE_BUTTONS_DOWN | RI_ALL_MOUSE_BUTTONS_UP | RI_MOUSE_WHEEL)))
 							{
 								// Mouse move: (Re)set click timer if no buttons down and mouse moved enough to avoid jitter
-								if((0 == usMouseButtonsDown) && fOkToClick)
+								if ((0 == usMouseButtonsDown) && fOkToClick)
 								{
 									// Use double-click time as an indication of the user's responsiveness preference
 									(void)SetTimer(hWnd, TIMER_EVENT_ID, GetDoubleClickTime(), NULL);
@@ -172,14 +172,14 @@ int APIENTRY _tWinMain(const HINSTANCE hInstance, const HINSTANCE hPrevInstance,
 
 	// Create a mutex to prevent running multiple simultaneous instances
 	const HANDLE mutex = CreateMutex(NULL, FALSE, APPLICATION_NAME);
-	if((NULL != mutex) && (ERROR_ALREADY_EXISTS != GetLastError()))
+	if ((NULL != mutex) && (ERROR_ALREADY_EXISTS != GetLastError()))
 	{
 		// Register the window class
 		WNDCLASS wc = {0};
 		wc.lpfnWndProc = WndProc;
 		wc.hInstance = hInstance;
 		wc.lpszClassName = APPLICATION_NAME;
-		if(0 != RegisterClass(&wc))
+		if (0 != RegisterClass(&wc))
 		{
 			// Create a message-only window to receive WM_INPUT and WM_TIMER
 			const HWND hWnd = CreateWindow(APPLICATION_NAME, APPLICATION_NAME, 0, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, HWND_MESSAGE, NULL, hInstance, NULL);
@@ -191,7 +191,7 @@ int APIENTRY _tWinMain(const HINSTANCE hInstance, const HINSTANCE hPrevInstance,
 				rid.usUsage = HID_USAGE_GENERIC_MOUSE;
 				rid.dwFlags = RIDEV_INPUTSINK;
 				rid.hwndTarget = hWnd;
-				if(RegisterRawInputDevices(&rid, 1, sizeof(rid)))
+				if (RegisterRawInputDevices(&rid, 1, sizeof(rid)))
 				{
 					// Pump Windows messages
 					MSG msg = {0};
@@ -208,7 +208,7 @@ int APIENTRY _tWinMain(const HINSTANCE hInstance, const HINSTANCE hPrevInstance,
 		// Failed to initialize, output a diagnostic message (which is not more
 		// friendly because it represents a scenario that should never occur)
 		TCHAR szMessage[64];
-		if(SUCCEEDED(StringCchPrintf(szMessage, sizeof(szMessage)/sizeof(szMessage[0]), TEXT("Initialization failure. GetLastError=%d\r\n"), GetLastError())))
+		if (SUCCEEDED(StringCchPrintf(szMessage, sizeof(szMessage)/sizeof(szMessage[0]), TEXT("Initialization failure. GetLastError=%d\r\n"), GetLastError())))
 		{
 			(void)MessageBox(NULL, szMessage, APPLICATION_NAME, MB_OK | MB_ICONERROR);
 		}
