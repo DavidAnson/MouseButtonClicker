@@ -7,6 +7,7 @@
 
 
 #include <windows.h>
+#include <hidusage.h>
 #include <tchar.h>
 #include <malloc.h>
 #include <strsafe.h>
@@ -32,7 +33,7 @@ COMPILE_TIME_ASSERT(RI_ALL_MOUSE_BUTTONS_DOWN == (RI_ALL_MOUSE_BUTTONS_UP >> 1))
 // Application-level constants
 #define APPLICATION_NAME (TEXT("MouseButtonClicker"))
 #define TIMER_EVENT_ID (1)
-#define MOUSE_MOVE_THRESHOLD (2)
+#define MOUSE_MOVE_THRESHOLD (5)
 
 // Window procedure
 LRESULT CALLBACK WndProc(const HWND hWnd, const UINT message, const WPARAM wParam, const LPARAM lParam)
@@ -186,8 +187,8 @@ int APIENTRY _tWinMain(const HINSTANCE hInstance, const HINSTANCE hPrevInstance,
 			{
 				// Register for the mouse's raw input data
 				RAWINPUTDEVICE rid = {0};
-				rid.usUsagePage = 1;  // HID_DEVICE_SYSTEM_MOUSE
-				rid.usUsage = 2;  // HID_DEVICE_SYSTEM_MOUSE
+				rid.usUsagePage = HID_USAGE_PAGE_GENERIC;
+				rid.usUsage = HID_USAGE_GENERIC_MOUSE;
 				rid.dwFlags = RIDEV_INPUTSINK;
 				rid.hwndTarget = hWnd;
 				if(RegisterRawInputDevices(&rid, 1, sizeof(rid)))
