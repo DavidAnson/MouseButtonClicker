@@ -1,4 +1,4 @@
-// MouseButtonClicker - http://blogs.msdn.com/Delay
+// MouseButtonClicker - https://github.com/DavidAnson/MouseButtonClicker
 //
 // "MouseButtonClicker clicks the mouse so you don't have to!"
 //
