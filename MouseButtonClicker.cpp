@@ -2,8 +2,8 @@
 //
 // "MouseButtonClicker clicks the mouse so you don't have to!"
 //
-// Simple Windows utility to click the primary mouse button whenever the mouse
-// stops moving as a usability convenience/enhancement.
+// Simple Windows utility to click the primary mouse button when the mouse
+// stops moving as a usability convenience and enhancement.
 
 
 #include <windows.h>
@@ -89,6 +89,7 @@ LRESULT CALLBACK WndProc(const HWND hWnd, const UINT message, const WPARAM wPara
 									// Handle absolute coordinates
 									// Documentation says these will be in the range [0, 65535]
 									// However, some devices generate [0, SCREEN_X/Y] instead
+									// Therefore, delta X/Y won't always be pixel units
 									lLastClickDeltaX += (lMouseInputLastX - lLastMoveAbsoluteX);
 									lLastClickDeltaY += (lMouseInputLastY - lLastMoveAbsoluteY);
 									lLastMoveAbsoluteX = lMouseInputLastX;
