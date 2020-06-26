@@ -88,12 +88,13 @@ LRESULT CALLBACK WndProc(const HWND hWnd, const UINT message, const WPARAM wPara
 
 									// Handle absolute coordinates
 									// Documentation says these will be in the range [0, 65535]
-									// However, some devices generate [0, SCREEN_X/Y] instead
-									// Therefore, delta X/Y won't always be pixel units
-									lLastClickDeltaX += (lMouseInputLastX - lLastMoveAbsoluteX);
-									lLastClickDeltaY += (lMouseInputLastY - lLastMoveAbsoluteY);
-									lLastMoveAbsoluteX = lMouseInputLastX;
-									lLastMoveAbsoluteY = lMouseInputLastY;
+									// Scale to [0, 4095] to simulate pixel sizes on a 4K display
+									const LONG lScaledMouseInputLastX = lMouseInputLastX >> 4;
+									const LONG lScaledMouseInputLastY = lMouseInputLastY >> 4;
+									lLastClickDeltaX += (lScaledMouseInputLastX - lLastMoveAbsoluteX);
+									lLastClickDeltaY += (lScaledMouseInputLastY - lLastMoveAbsoluteY);
+									lLastMoveAbsoluteX = lScaledMouseInputLastX;
+									lLastMoveAbsoluteY = lScaledMouseInputLastY;
 								}
 							}
 
